@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ToDoPlatform.Data;
+using ToDoPlatform.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +13,28 @@ builder.Services.AddDbContext<AppDbContext>(
     options => options.UseMySQL(conexao)
 );
 // serviço de configuração de gestão de usuários
+builder.Services.AddIdentity<AppUser, IdentityRole>(
+    opt =>
+    {
+        opt.SignIn.RequireConfirmedAccount = false;
+        opt.User.RequireUniqueEmail= true;
+    }
+)
+
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using(var scope= app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.EnsureCreatedAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -27,6 +47,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

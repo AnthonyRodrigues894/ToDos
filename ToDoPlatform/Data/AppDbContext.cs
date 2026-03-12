@@ -16,6 +16,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
 
+        base.OnModelCreating(builder);
+
         AppDbSeed appDbSeed = new(builder);
 
         base.OnModelCreating(builder);

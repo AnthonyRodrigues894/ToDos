@@ -1,6 +1,6 @@
-
-
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using ToDoPlatform.Helpers;
 using ToDoPlatform.Models;
 using ToDoPlatform.ViewModels;
 
@@ -23,13 +23,34 @@ public class UserService : IUserService
         _logger = logger;
     }
 
-    public Task<SignInResult> Login(LoginVM login)
+    public async Task<SignInResult> Login(LoginVM login)
     {
-        throw new NotImplementedException();
+        string userName = login.Email;
+        if (Helper.IsValidEmail(login.Email))
+        {
+            var user = await _userManager.FindByEmailAsync(login.Email);
+            if ( user != null)
+                userName = user.UserName;
+        }
+
+        var result = await _signInManager.PasswordSignInAsync(
+            userName, login.Password, login.RememberMe, 
+            lockoutOnFailure: true
+        );
+
+        if (result.Succeeded)
+            _logger.LogInformation("");
+
+        if (result.IsLockedOut)
+            _logger.LogWarning("");
+
+        return result;
+                   
     }
 
-    public Task Logout()
+    public async Task Logout()
     {
-        throw new NotImplementedException();
+        _logger.LogInformation($"Usuário '{ClaimTypes.Email}' saiu do sistema");
+        await _signInManager.SignOutAsync();
     }
 }

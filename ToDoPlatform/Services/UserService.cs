@@ -14,40 +14,40 @@ public class UserService : IUserService
 
     public UserService(
         SignInManager<AppUser> signInManager,
-        UserManager<AppUser> userManager,
-        ILogger<UserService> logger 
+        UserManager<AppUser>userManager,
+        ILogger<UserService> logger
     )
     {
-        _signInManager = signInManager;
+        _signInManager= signInManager;
         _userManager = userManager;
         _logger = logger;
     }
-
     public async Task<SignInResult> Login(LoginVM login)
     {
         string userName = login.Email;
-        if (Helper.isValidEmail(login.Email))
+        if (Helper.IsValidEmail(login.Email))
         {
             var user = await _userManager.FindByEmailAsync(login.Email);
-            if (user != null)
-                userName = user.UserName;
+            if (user !=null)
+                userName =user.UserName;
+
         }
-
         var result = await _signInManager.PasswordSignInAsync(
-            userName, login.Password, login.RememberMe, lockoutOnFailure: true
-        ); 
+            userName,login.Password, login.RememberMe, 
+            lockoutOnFailure: true
+        );
 
-        if(result.Succeeded)
-            _logger.LogInformation("");
-        if(result.IsLockedOut)
+        if (result.Succeeded)
+         _logger.LogInformation("");
+        if (result.IsLockedOut)
             _logger.LogWarning("");
-        
-        return result;
+
+            return result;
     }
 
     public async Task Logout()
     {
-        _logger.LogInformation($"Usuário '{ClaimTypes.Email}' saiu do sistema");
+        _logger.LogInformation($"Usuário '{ClaimTypes.Email}'saiu do sistema");
         await _signInManager.SignOutAsync();
     }
 }

@@ -3,9 +3,8 @@ using ToDoPlatform.ViewModels;
 
 namespace ToDoPlatform.Services;
 
-public interface IUserService
-{
-    Task<SignInResult> Login(LoginVM login);
-    Task Logout();
-}
-
+    public interface IUserService
+    {
+        Task<SignInResult> Login(LoginVM login);
+        Task Logout();
+    }

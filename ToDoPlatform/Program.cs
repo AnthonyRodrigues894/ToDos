@@ -1,24 +1,22 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ToDoPlatform.Data;
+using ToDoPlatform.Data; 
 using ToDoPlatform.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Serviço de Conexão com o Banco de Dados
 string conexao = builder.Configuration.GetConnectionString("Conexao");
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseMySQL(conexao)
 );
-
-// Serviço de Configurção de Gestão de Usuários
-builder.Services.AddIdentity<AppUser, IdentityRole>(
-    opt =>
+builder.Services.AddIdentity<AppUser,IdentityRole>(
+    opt => 
     {
         opt.SignIn.RequireConfirmedAccount = false;
-        opt.User.RequireUniqueEmail = true;
+        opt.User.RequireUniqueEmail=true;
     }
+
 )
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
@@ -26,12 +24,12 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateAsyncScope())
+using (var scope=app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var db =scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.EnsureCreatedAsync();
 }
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -47,6 +45,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapStaticAssets();
 
 app.MapControllerRoute(
@@ -56,3 +55,4 @@ app.MapControllerRoute(
 
 
 app.Run();
+

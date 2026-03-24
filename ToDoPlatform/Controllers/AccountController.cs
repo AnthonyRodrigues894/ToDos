@@ -1,26 +1,25 @@
-
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace ToDoPlatform.Controllers;
 
-public class AccountControllers : Controller
-{
-    private readonly ILogger<AccountControllers> _logger;
-
-    public AccountControllers(ILogger<AccountControllers> logger)
+    public class AccountController : Controller
     {
-        _logger = logger;
-    }
+        private readonly ILogger<AccountController> _logger;
 
-    public IActionResult Login()
-    {
-        return View();
-    }
+        public AccountController(ILogger<AccountController> logger)
+        {
+            _logger = logger;
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View("Error!");
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View("Error!");
+        }
     }
-}

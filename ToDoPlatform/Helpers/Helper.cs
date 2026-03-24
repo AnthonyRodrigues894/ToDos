@@ -4,16 +4,15 @@ namespace ToDoPlatform.Helpers;
 
 public static class Helper
 {
-    public static bool IsValidEmail (string email)
+    public static bool isValidEmail(string email)
     {
         try
         {
             MailAddress mail = new(email);
             return true;
         }
-        catch (System.Exception)
+        catch (FormatException)
         {
-            
             return false;
         }
     }

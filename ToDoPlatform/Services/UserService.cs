@@ -15,7 +15,7 @@ public class UserService : IUserService
     public UserService(
         SignInManager<AppUser> signInManager,
         UserManager<AppUser> userManager,
-        ILogger<UserService> logger
+        ILogger<UserService> logger 
     )
     {
         _signInManager = signInManager;
@@ -26,26 +26,23 @@ public class UserService : IUserService
     public async Task<SignInResult> Login(LoginVM login)
     {
         string userName = login.Email;
-        if (Helper.IsValidEmail(login.Email))
+        if (Helper.isValidEmail(login.Email))
         {
             var user = await _userManager.FindByEmailAsync(login.Email);
-            if ( user != null)
+            if (user != null)
                 userName = user.UserName;
         }
 
         var result = await _signInManager.PasswordSignInAsync(
-            userName, login.Password, login.RememberMe, 
-            lockoutOnFailure: true
-        );
+            userName, login.Password, login.RememberMe, lockoutOnFailure: true
+        ); 
 
-        if (result.Succeeded)
+        if(result.Succeeded)
             _logger.LogInformation("");
-
-        if (result.IsLockedOut)
+        if(result.IsLockedOut)
             _logger.LogWarning("");
-
+        
         return result;
-                   
     }
 
     public async Task Logout()

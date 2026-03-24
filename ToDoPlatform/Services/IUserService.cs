@@ -8,3 +8,4 @@ public interface IUserService
     Task<SignInResult> Login(LoginVM login);
     Task Logout();
 }
+

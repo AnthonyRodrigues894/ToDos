@@ -1,11 +1,14 @@
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace ToDoPlatform.Controllers;
-public class AccountController : Controller
-{
-    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(ILogger<AccountController> logger)
+namespace ToDoPlatform.Controllers;
+
+public class AccountControllers : Controller
+{
+    private readonly ILogger<AccountControllers> _logger;
+
+    public AccountControllers(ILogger<AccountControllers> logger)
     {
         _logger = logger;
     }

@@ -6,31 +6,28 @@ using ToDoPlatform.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// serviço conexão banco de dados
-string conexao =builder.Configuration
-    .GetConnectionString("conexao");
+// Serviço de Conexão com o Banco de Dados
+string conexao = builder.Configuration.GetConnectionString("Conexao");
 builder.Services.AddDbContext<AppDbContext>(
     options => options.UseMySQL(conexao)
 );
-// serviço de configuração de gestão de usuários
+
+// Serviço de Configurção de Gestão de Usuários
 builder.Services.AddIdentity<AppUser, IdentityRole>(
     opt =>
     {
         opt.SignIn.RequireConfirmedAccount = false;
-        opt.User.RequireUniqueEmail= true;
+        opt.User.RequireUniqueEmail = true;
     }
 )
-
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
-
-
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-using(var scope= app.Services.CreateScope())
+using (var scope = app.Services.CreateAsyncScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.EnsureCreatedAsync();
